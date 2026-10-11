@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="fr" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0B1220">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>PassLab</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+  <header class="topbar">
+    <button id="btnBack" class="icon-btn" aria-label="Retour" hidden>
+      <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7" /></svg>
+    </button>
+    <h1 id="topTitle">PassLab</h1>
+    <span class="demo-badge" title="Version de démonstration">DÉMO</span>
+    <button id="btnSettings" class="icon-btn" aria-label="Réglages">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button>
+  </header>
+
+  <main>
+    <!-- ───────── Scanner ───────── -->
+    <section id="view-scan" class="view">
+      <div class="card scanner">
+        <div class="viewport" id="viewport">
+          <video id="video" playsinline muted autoplay></video>
+          <div class="frame" id="frame">
+            <i></i><i></i><i></i><i></i>
+            <div class="laser"></div>
+            <svg class="okmark" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+          </div>
+          <div class="cam-msg" id="camMsg">
+            <p id="camMsgText">Démarrage de la caméra…</p>
+            <button id="btnSim" class="btn ghost small" hidden>Simuler un scan</button>
+          </div>
+        </div>
+        <p class="scan-hint" id="scanHint">Cadre le code dans le viseur</p>
+        <div class="cam-controls">
+          <div class="seg" id="zoomCtl" hidden>
+            <button id="zoomOut" aria-label="Zoom moins">−</button>
+            <span id="zoomVal">1×</span>
+            <button id="zoomIn" aria-label="Zoom plus">+</button>
+          </div>
+          <select id="camSelect" aria-label="Caméra" hidden></select>
+        </div>
+      </div>
+
+      <div class="card row">
+        <span id="travLabel">Nombre de voyageurs</span>
+        <div class="seg">
+          <button id="travMinus" aria-label="Moins">−</button>
+          <span id="travVal">1</span>
+          <button id="travPlus" aria-label="Plus">+</button>
+        </div>
+      </div>
+
+      <button id="btnHelp" class="btn outline wide">Comment ça marche ?</button>
+    </section>
+
+    <!-- ───────── Animation de validation ───────── -->
+    <section id="view-loading" class="view">
+      <div class="logo-wrap" id="logoWrap">
+        <div class="ring-spin"></div>
+        <div class="logo-core" id="logoCore"><span id="logoText">P</span></div>
+        <svg class="done-mark" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+      </div>
+      <p class="loading-text" id="loadingText">Validation en cours…</p>
+    </section>
+
+    <!-- ───────── Titre ───────── -->
+    <section id="view-pass" class="view">
+      <div class="card hero stagger">
+        <div class="avatar" id="avatar"><span id="avatarInitials">CD</span></div>
+        <div class="hero-text">
+          <div class="holder" id="holderName">Camille Demo</div>
+          <div class="trav-chip" id="travChip" hidden></div>
+        </div>
+        <div class="status-pill"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>Validé</div>
+      </div>
+
+      <div class="card transfer stagger">
+        <div class="tring">
+          <svg viewBox="0 0 64 64">
+            <circle class="track" cx="32" cy="32" r="27"/>
+            <circle class="prog" id="tProg" cx="32" cy="32" r="27"/>
+          </svg>
+          <b id="tMin">0</b>
+        </div>
+        <div class="transfer-text">
+          <div id="tText">Correspondance possible encore 0 min</div>
+          <small id="tSub"></small>
+        </div>
+      </div>
+
+      <div class="card pass stagger">
+        <div class="pass-head">
+          <div>
+            <div class="pass-title" id="passTitle">Pass mensuel</div>
+            <div class="pass-net" id="passNet">Réseau Démo</div>
+          </div>
+          <span class="pass-dot" aria-hidden="true"></span>
+        </div>
+        <dl>
+          <dt id="lblValidity">Période de validité</dt>
+          <dd class="period">
+            <span><b id="vFromD">--/--/--</b> <em id="vFromT">--:--</em></span>
+            <svg viewBox="0 0 24 24" class="arrow"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            <span><b id="vToD">--/--/--</b> <em id="vToT">--:--</em></span>
+          </dd>
+          <dt id="lblLast">Dernière validation</dt>
+          <dd><b id="lastD">--/--/--</b> <em id="lastT">--:--</em></dd>
+        </dl>
+        <button id="btnTransfer" class="btn primary wide">Valider une correspondance</button>
+      </div>
+
+      <p class="foot-note">Version de démonstration · aucun titre de transport réel.</p>
+    </section>
+
+    <!-- ───────── Réglages ───────── -->
+    <section id="view-settings" class="view">
+      <div class="card form">
+        <h2>Identité</h2>
+        <label>Nom de l'appli<input data-key="appName" type="text" maxlength="24"></label>
+        <label>Lettres du logo<input data-key="logoText" type="text" maxlength="2"></label>
+        <div class="file-row">
+          <span>Logo (image)</span>
+          <input id="logoFile" type="file" accept="image/*" hidden>
+          <button class="btn ghost small" id="logoPick" type="button">Choisir</button>
+          <button class="btn ghost small" id="logoClear" type="button">Retirer</button>
+        </div>
+        <label>Nom du titulaire<input data-key="holderName" type="text" maxlength="40"></label>
+        <div class="file-row">
+          <span>Photo</span>
+          <input id="photoFile" type="file" accept="image/*" hidden>
+          <button class="btn ghost small" id="photoPick" type="button">Choisir</button>
+          <button class="btn ghost small" id="photoClear" type="button">Retirer</button>
+        </div>
+      </div>
+
+      <div class="card form">
+        <h2>Titre</h2>
+        <label>Libellé du titre<input data-key="passTitle" type="text" maxlength="48"></label>
+        <label>Réseau<input data-key="network" type="text" maxlength="32"></label>
+      </div>
+
+      <div class="card form">
+        <h2>Dates automatiques</h2>
+        <div class="two">
+          <label>Jour du mois<input data-key="startDay" type="number" min="1" max="28" inputmode="numeric"></label>
+          <label>Heure de début<input data-key="startTime" type="time"></label>
+        </div>
+        <label>Heure de fin (mois suivant)<input data-key="endTime" type="time"></label>
+        <p class="hint">Début : jour choisi du mois en cours. Fin : même jour du mois suivant.</p>
+      </div>
+
+      <div class="card form">
+        <h2>Comportement</h2>
+        <div class="two">
+          <label>Correspondance (min)<input data-key="transferMin" type="number" min="1" max="600" inputmode="numeric"></label>
+          <label>Mémoire du scan (min)<input data-key="memoryMin" type="number" min="1" max="1440" inputmode="numeric"></label>
+        </div>
+        <p class="hint">Si tu rouvres l'appli dans ce délai après un scan, le titre s'affiche directement avec l'heure du dernier scan.</p>
+        <button class="btn ghost small" id="btnClearScan" type="button">Effacer le dernier scan</button>
+      </div>
+
+      <div class="card form">
+        <h2>Apparence</h2>
+        <label>Thème
+          <select data-key="theme">
+            <option value="dark">Sombre</option>
+            <option value="light">Clair</option>
+          </select>
+        </label>
+        <div class="two">
+          <label>Couleur principale<input data-key="accent" type="color"></label>
+          <label>Couleur secondaire<input data-key="accent2" type="color"></label>
+        </div>
+      </div>
+
+      <div class="card form">
+        <h2>Textes</h2>
+        <label>Titre du scanner<input data-key="texts.scanTitle" type="text" maxlength="40"></label>
+        <label>Voyageurs<input data-key="texts.travelersLabel" type="text" maxlength="40"></label>
+        <label>Période de validité<input data-key="texts.validityLabel" type="text" maxlength="40"></label>
+        <label>Dernière validation<input data-key="texts.lastLabel" type="text" maxlength="40"></label>
+        <label>Correspondance ({n} = minutes)<input data-key="texts.transferText" type="text" maxlength="60"></label>
+        <label>Bouton correspondance<input data-key="texts.transferBtn" type="text" maxlength="40"></label>
+      </div>
+
+      <button class="btn outline wide" id="btnReset" type="button">Réinitialiser les réglages</button>
+      <p class="foot-note">Le badge « DÉMO » n'est pas modifiable.</p>
+    </section>
+  </main>
+
+  <dialog id="helpDlg">
+    <h3>Comment ça marche ?</h3>
+    <p>Cette appli est une démonstration technique : elle ouvre la caméra, détecte n'importe quel QR code, joue une animation, puis affiche un titre fictif.</p>
+    <p>Aucun lien avec un réseau de transport réel : le titre, les dates et la validation sont simulés et sans valeur.</p>
+    <button class="btn primary wide" id="helpClose">Compris</button>
+  </dialog>
+</div>
+
+<script src="vendor/jsQR.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
