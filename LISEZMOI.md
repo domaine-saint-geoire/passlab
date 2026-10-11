@@ -1,5 +1,7 @@
 # PassLab
 
+**En ligne : https://domaine-saint-geoire.github.io/passlab/** (GitHub Pages, dépôt `domaine-saint-geoire/passlab`, branche `main`). Pour mettre à jour : modifier les fichiers puis `git push`.
+
 Démo mobile : scanner QR (n'importe quel code) → animation → titre fictif. Tout se personnalise dans l'écran **Réglages** (engrenage en haut à droite). Le badge « DÉMO » est fixe.
 
 ## Tester sur le PC
